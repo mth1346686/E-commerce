@@ -1,92 +1,98 @@
-# Enterprise Performance & E-Commerce Executive BI Dashboard
+# E-Commerce Data Integration & Analytics Pipeline
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Excel](https://img.shields.io/badge/Microsoft_Excel-217346?style=flat&logo=microsoft-excel&logoColor=white)](https://office.live.com/)
-[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org/)
-[![Status](https://img.shields.io/badge/Status-Production_Ready-success.svg)](#)
+[![DEPI](https://img.shields.io/badge/Initiative-DEPI_Egypt-0052CC.svg)](https://depi.gov.eg/)
+[![Track](https://img.shields.io/badge/Track-Data_Engineering-orange.svg)](#)
+[![Documentation](https://img.shields.io/badge/Documentation-PDF_Available-red.svg)](./Documentation.pdf)
+[![Airflow](https://img.shields.io/badge/Orchestration-Apache_Airflow-017CEE.svg?logo=apache-airflow&logoColor=white)](https://airflow.apache.org/)
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Docker](https://img.shields.io/badge/Packaging-Docker-2496ED.svg?logo=docker&logoColor=white)](https://www.docker.com/)
 
-A modern, fully dynamic, multi-page Enterprise & E-Commerce Executive Performance Dashboard suite built with **Microsoft Excel OpenXML (`.xlsx`)** and Python (`xlsxwriter`, `reportlab`). Designed with an ultra-sleek dark theme (`#071321` / `#0B1E33`), uniform interactive sidebar navigation, live mathematical formula binding, and one-click PDF export functionality.
+Official Graduation Project for the **Digital Egypt Pioneers Initiative (DEPI)** — Data Engineering Track.
 
----
-
-## 📸 Dashboard Overview
-
-![Enterprise Performance Dashboard](assets/dashboard_preview.jpg)
+An end-to-end automated ETL and data warehousing pipeline that extracts multi-source sales and catalog feeds, cleanses and validates records, and populates a performance-optimized **Kimball Star Schema** data warehouse orchestrated via **Apache Airflow**.
 
 ---
 
-## 🌟 Key Features
+## 📄 Project Documentation
 
-### 1. 100% Dynamic Formulas (Zero Hardcoded Metrics)
-- **Live Reactive KPIs:** All high-level cards (`Total Revenue: $9.248M`, `Total Cost: $612K`, `Gross Profit: $9.56K`, `Gross Margin: 27%`) compute via dynamic OpenXML formulas reading from the `Raw_Data` transactional ledger.
-- **Dynamic Growth Deltas:** Automated month-over-month growth calculations (`"▲ " & TEXT(...)`) reflecting historical variances.
-- **Key Metrics Table:** Integrated calculations for **Actual**, **Budget**, **Variance**, **Variance %**, **Prior Period**, and **YTD Total**.
-- **Live Reactive Charts:** The `REVENUE TREND` line chart, `REVENUE BY SEGMENT` donut chart, and `PERFORMANCE BY CHANNEL` column chart are dynamically bound to the relational tables in `Raw_Data`.
+The complete, official 5-page graduation project documentation is available in this repository:
 
-### 2. Uniform Interactive Sidebar Navigation
-- Consistent **6-button navigation sidebar** replicated with mathematical precision across all 7 sheets:
-  1. `📊 Dashboard`: Master C-suite executive overview.
-  2. `💲 Revenue`: Inbound channels, customer acquisition cost (CAC), and LTV:CAC economics.
-  3. `📈 Profitability`: Corporate Profit & Loss (P&L) statement with COGS, OpEx, and EBITDA.
-  4. `🌐 Regional Sales`: Geographic performance across North America, EMEA, APAC, and LATAM.
-  5. `📦 Products`: SKU matrix, units sold, unit pricing, and product margin contributions.
-  6. `📥 Export to PDF`: One-click action launching the companion executive PDF report.
-- Active sheet buttons feature vibrant teal highlighting (`#009E8A`), while inactive buttons provide one-click internal hyperlinks.
-
-### 3. Dedicated 1-Click PDF Export
-- **Embedded Action Link:** Clicking `📥 Export to PDF` anywhere in the workbook triggers the device's default PDF viewer to open the companion executive report (`Enterprise_Performance_Dashboard_Export.pdf`).
-- **Print Optimization:** The `Export_Report` worksheet is pre-configured with A4 landscape geometry and `fit_to_pages(1, 1)` for clean printing.
+👉 **[Download Project Documentation (PDF)](./Documentation.pdf)**
 
 ---
 
-## 📁 Repository Structure
+## 👥 Team Members & Assigned Roles
+
+| Member | Role | Key Responsibilities |
+| :--- | :--- | :--- |
+| **Mahmoud Tarek Mahmoud Hafez** | **Team Leader, Data Architect & Pipeline Lead** | Overall project supervision, system architecture design, Kimball star schema modeling, DDL generation, Airflow DAG workflow implementation, and GitHub governance. |
+| **Mohamed Ahmed Fathy El-Deeb** | **Core Extraction & Ingestion** | Development of ingestion scripts, REST API connectors, web scrapers, schema validation logic, and raw landing stage operations. |
+| **Mahmoud Abdelnaby Refaat Ibrahim** | **Core Transformation & Data Warehouse** | End-to-end data cleansing scripts, complex Pandas business transformations, SQL aggregation views, indexing strategies, and incremental staging loads. |
+| **Associate Team Member 4** | **Support & QA Documentation** | Predefined data-quality check scripts, technical summaries, data dictionaries, pipeline run logs monitoring, and presentation deliverables. |
+
+---
+
+## 🏗️ System Architecture & Workflow
 
 ```
-.
-├── Enterprise_Performance_Dashboard.xlsx   # Master Dynamic Multi-Page Excel BI Suite
-├── Enterprise_Performance_Dashboard_Export.pdf # Companion C-Suite Landscape PDF Report
-├── Enterprise_Performance_Dashboard_Preview.html # Standalone Interactive Mobile Web Preview
-├── build_master_dynamic_dashboard.py      # Production Python builder script
-├── assets/
-│   └── dashboard_preview.jpg              # High-resolution dashboard reference image
-├── .gitignore                             # Git ignore rules
-└── README.md                              # Repository documentation
-```
-
----
-
-## 🚀 Quick Start
-
-### Option 1: Open the Interactive Excel Dashboard
-Simply open `Enterprise_Performance_Dashboard.xlsx` in:
-- **Microsoft Excel** (Office 365, Excel 2016+, Excel for Web, or Excel Mobile).
-- **WPS Office** or **LibreOffice Calc**.
-
-### Option 2: Run / Rebuild via Python
-To regenerate the Excel suite and PDF report from scratch:
-
-```bash
-# Clone the repository
-git clone https://github.com/mth1346686/E-commerce.git
-cd E-commerce
-
-# Install dependencies
-pip install xlsxwriter reportlab openpyxl
-
-# Execute builder script
-python3 build_master_dynamic_dashboard.py
+[ Multi-Source Ingestion ]
+   ├── Product Catalogs (REST APIs & Web Scraping)
+   ├── Transactions & Customers (CSV / JSON streams)
+               │
+               ▼
+[ Pre-Ingestion & Cleansing Layer (Python & Pandas) ]
+   ├── Schema Validation & Drift Detection
+   ├── Deduplication & Normalization
+   ├── Imputation & UTC Timestamp Standardization
+   ├── Dead-Letter Queue (Quarantine for Malformed Records)
+               │
+               ▼
+[ Data Warehouse & Analytical Modeling ]
+   ├── Fact_Sales
+   ├── Dim_Customer
+   ├── Dim_Product
+   └── Dim_Date
+               │
+               ▼
+[ Business Intelligence & Analytics Views ]
+   ├── Optimized Indexes & Materialized SQL Views
+   └── High-Frequency KPI Aggregations (Sub-second query latency)
 ```
 
 ---
 
-## 📊 Summary of Master Key Metrics
+## 🗓️ Project Plan (Timeline & Milestones)
 
-| Metric | May Actual | Budget | Variance ($) | Variance (%) | Prior Period | YoY Growth |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Total Revenue** | **$9.248M** | $8.500M | +$748K | **+8.8%** | $8.223M | **+12.4%** |
-| **Total Cost** | **$612K** | $650K | -$38K | **-5.7%** | $648K | **-5.7%** |
-| **Gross Profit** | **$9.56K** | $7.850K | +$1.71K | **+21.8%** | $7.575K | **+18.2%** |
-| **Gross Margin** | **27.0%** | 23.0% | +3.0 pp | – | 23.9% | **+3.1 pp** |
+| Phase | Timeline | Milestones & Key Deliverables |
+| :--- | :--- | :--- |
+| **Phase 1: Planning & Requirements** | Oct 2 – Oct 16, 2026 | Finalized project charter, team roles, requirements document, and GitHub repository setup. |
+| **Phase 2: System Analysis & Modeling** | Oct 16 – Nov 6, 2026 | Conceptual architecture diagram, ERD design, DFD mapping, and Star Schema modeling. |
+| **Phase 3: ETL & Pipeline Development** | Nov 6 – Nov 30, 2026 | Python ingestion modules, transformation scripts, SQL DDL/DML, and functional Airflow DAGs. |
+| **Phase 4: Testing, QA & Final Delivery** | Nov 30 – Dec 4, 2026 | Data quality assertion tests, Docker containerization, final presentation, infographic, and reports. |
+
+---
+
+## 🎯 Key Performance Indicators (KPIs)
+
+* **Pipeline Execution SLA:** Scheduled daily DAG run completion time under **15 minutes**.
+* **Data Quality & Integrity Rate:** Above **99.5% validity** across primary keys, foreign keys, and non-nullable transaction values.
+* **Query Latency:** Sub-second execution time (**< 1.0s**) for standard analytical reporting on the relational star schema.
+* **System Resilience:** Automated recovery and idempotency ensuring **zero duplicate transactions** upon retry.
+
+---
+
+## 🛡️ Risk Assessment & Mitigation
+
+1. **External API Rate Limiting / Outages:** Mitigated via exponential backoff, circuit-breaker logic, Airflow retries, and cached landing storage.
+2. **Schema Drift & Corrupt Feeds:** Validated at ingestion; malformed records are routed to a dead-letter quarantine table without halting the pipeline.
+3. **Analytical Query Bottlenecks:** Addressed with composite indexes on foreign keys and date dimensions, alongside pre-aggregated SQL views.
+
+---
+
+## 📚 References & Standards
+* Kimball, R., & Ross, M. (2013). *The Data Warehouse Toolkit: The Definitive Guide to Dimensional Modeling*.
+* Apache Airflow Documentation: *Architecture, Scheduling & Orchestration Best Practices*.
+* McKinney, W. (2022). *Python for Data Analysis: Data Wrangling with pandas, NumPy, and Jupyter*.
 
 ---
 
